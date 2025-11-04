@@ -1,6 +1,6 @@
-#FastAPI setup for meme share application
+# FastAPI setup for meme share application
 
-##Done by Venkataraman T S K
+## Done by Venkataraman T S K
 
 This is a FastAPI backend consisting of 3 main files namely main.py, models.py and __init__.py file. the main.py file contains the core logic, where models.py consists of the schema we would be working, very useful in terms of database connections in future and finally, __init__.py , making this file explicit would allow us to handle imports and relative imports  work when modules are imported as `python.main:app`
 
