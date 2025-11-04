@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 
 
-class Posts(BaseModel):
+class Post(BaseModel):
     id: int
     title: str
     description: str

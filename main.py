@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from models import Posts
+from models import Post
 from datetime import datetime
 import platform
 
@@ -8,17 +8,17 @@ import platform
 app = FastAPI()
 
 # CORS setup
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"], #allows request from all domains
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"], #allows request from all domains
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 #we store our posts here
 posts = [
-    Posts(
+    Post(
         id=1,
         title="nov theory",
         description="nov born kids exist cuz of valentines day!",
@@ -35,7 +35,7 @@ async def feed():
     return posts
 
 @app.post("/create")
-async def create(post: Posts):
+async def create(post: Post):
     # set timestamp if missing
     if post.timestamp is None:
         post.timestamp = datetime.utcnow()
@@ -43,7 +43,7 @@ async def create(post: Posts):
     return {"message": "Post created", "post": post}
 
 @app.put("/edit/{id}")
-async def edit_post(id: int, post: Posts):
+async def edit_post(id: int, post: Post):
     # Find the post by id and replace it. Return 404 if not found.
     for idx, existing in enumerate(posts):
         if existing.id == id:
@@ -55,7 +55,7 @@ async def edit_post(id: int, post: Posts):
     raise HTTPException(status_code=404, detail="Post not found")
 
 @app.delete("/delete/{id}")
-async def delete_post(id:int,post:Posts):
+async def delete_post(id:int,post:Post):
     for idx,existing in enumerate(posts):
         if existing.id == id:
             posts.remove(existing) #deleting by passing value
@@ -66,4 +66,13 @@ async def delete_post(id:int,post:Posts):
 @app.get("/alive")
 async def alive():
     osname = platform.system()
-    return {"message": f"I am alive, running on {{{osname}}}"}
+    return {
+        "status": "alive",
+        "os": osname,
+        "uptime": 0
+    }
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
